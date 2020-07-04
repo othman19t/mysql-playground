@@ -13,9 +13,19 @@ before running the following script please first run tables.sql file first to cr
 
 ***/
 
-SELECT employees.employee_id, first_name, last_name, email, phone_num, department, position, job_type, age, salary, relationship_status, children, hire_date, cities.city_name, cities.num_of_employees,
-if(cities.city_name = 'Vancouver', 'High chance', 'low chance') AS rate
-FROM employees INNER JOIN cities ON employees.city_id=cities.city_id
-LEFT OUTER JOIN teams ON employees.city_id=teams.city_id
-WHERE (position = 'Web Developer' OR position = 'front-end Web Developer')AND relationship_status = 'single' AND job_type = 'full time' AND DATE(hire_date) >= '2019-05-01' ORDER BY rate
-
+SELECT employees.employee_id, first_name, last_name, email, phone_num, department, position, job_type, age, salary, relationship_status, children, hire_date, cities.city_name, cities.num_of_employees, 
+if(cities.city_name = 'Vancouver', 'High chance', 'low chance')AS rate,
+CASE children
+    WHEN '0' THEN 'has no childern' 
+    WHEN '1' THEN 'has one child only' 
+    ELSE 'has 2 or more childern'
+END children
+FROM employees
+INNER JOIN cities ON employees.city_id=cities.city_id
+LEFT OUTER JOIN teams ON employees.city_id=teams.city_id 
+WHERE (position = 'Web Developer'
+       OR position = 'front-end Web Developer')
+       AND relationship_status = 'single' 
+       AND job_type = 'full time' 
+       AND DATE(hire_date) >= '2019-05-01' 
+       ORDER BY rate
